@@ -1,0 +1,19 @@
+def maListDirectory(path, max, valeurActuelle):
+    list = []
+    fichier = []
+    l = os.listdir(path)
+
+    for ii in l :
+        chemin = path + '\\' + ii
+        list.append(chemin)
+    print("TEST :" , list , "Val actu = ",valeurActuelle)
+    for i in list:
+        #print()
+        #chemin = path + '\\' + i
+        #print("Variable chemin: [",chemin,"]" , os.path.isdir(chemin))
+        if os.path.isdir(i) and (valeurActuelle <= max) : #Valeur actuelle Permet de delimiter le nombre de recurrence de la recusivité
+            print("max =",max,' act =',valeurActuelle)
+            fichier.extend(maListDirectory(i,max,valeurActuelle+1))
+        else:
+            fichier.append(i)
+    return fichier
