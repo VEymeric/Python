@@ -1,0 +1,60 @@
+import sys
+import os
+
+import glob
+import os.path
+
+def fichieryolo(path,nbrSousDossier):
+    """
+    :param path: chemin d'acces du Document a analyser
+    :param nbrSousDossier: nbr de sous dossier que l'on veux analyser.
+    :return: une liste avec le chemin de tout les sous-dossier/fichier
+    """
+
+    fichier = []
+    if nbrSousDossier == 0 :
+        l = glob.glob(path + '\\*') #glob.glob vas lister le contenu d'un repertoire
+        for i in l:
+            fichier.append(i)
+        return fichier
+
+    else :
+        current =0
+        aReturn = listdirectory(path,nbrSousDossier-1,current) #-1 a cause d'un coup d'ajustement
+        return aReturn
+
+
+def listdirectory(path,max,valeurActuelle):
+    fichier = []
+    l = glob.glob(path + '\\*')
+
+    for i in l:
+
+        if os.path.isdir(i) and (valeurActuelle <= max) : #Valeur actuelle Permet de delimiter le nombre de recurrence de la recusivité
+            fichier.extend(listdirectory(i,max,valeurActuelle+1))
+
+        else:
+            fichier.append(i)
+
+
+    return (fichier)
+
+
+
+def mymain():
+
+    l = fichieryolo("D:\Document\Cours\Python\TP1", 2)
+    print("PREMEIRE TEST : " , l)
+
+    ll = fichieryolo("D:\Document\Cours\Python\TP1", 0)#0 pour dire on entre pas
+    #print("DEUXIEME TEST : " ,ll)
+
+    i = os.path.getsize("D:\\Document\\Cours\\Python\\TP1\\premier\\deuxieme\\troisiemetexte.txt")
+    #print(i)
+
+
+
+
+
+if __name__ == "__main__":
+    mymain()
