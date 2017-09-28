@@ -4,7 +4,7 @@ import os
 import glob
 import os.path
 
-def fichieryolo(path,nbrSousDossier):
+def scanDoctor(path,nbrSousDossier):
     """
     :param path: chemin d'acces du Document a analyser
     :param nbrSousDossier: nbr de sous dossier que l'on veux analyser.
@@ -43,10 +43,10 @@ def listdirectory(path,max,valeurActuelle):
 
 def mymain():
 
-    l = fichieryolo("D:\Document\Cours\Python\TP1", 2)
+    l = scanDoctor("D:\Document\Cours\Python\TP1", 2)
     print("PREMEIRE TEST : " , l)
 
-    ll = fichieryolo("D:\Document\Cours\Python\TP1", 0)#0 pour dire on entre pas
+    ll = scanDoctor("D:\Document\Cours\Python\TP1", 0)#0 pour dire on entre pas
     #print("DEUXIEME TEST : " ,ll)
 
     i = os.path.getsize("D:\\Document\\Cours\\Python\\TP1\\premier\\deuxieme\\troisiemetexte.txt")
