@@ -39,18 +39,12 @@ def listdirectory(path,max,valeurActuelle):
     list = []
     fichier = []
     l = os.listdir(path)
-
     for ii in l:
         chemin = path + '\\' + ii
         list.append(chemin)
-    print("TEST :", list, "Val actu = ", valeurActuelle)
     for i in list:
-        # print()
-        # chemin = path + '\\' + i
-        # print("Variable chemin: [",chemin,"]" , os.path.isdir(chemin))
         if os.path.isdir(i) and (
             valeurActuelle <= max):  # Valeur actuelle Permet de delimiter le nombre de recurrence de la recusivité
-            print("max =", max, ' act =', valeurActuelle)
             fichier.extend(listdirectory(i, max, valeurActuelle + 1))
         else:
             fichier.append(i)
@@ -111,15 +105,17 @@ def scanLaunch(path, nbSousDossier = 0):
 
 
 def mymain():
-    scanLaunch("G:\Cours ISEN", 1)
-    for a in dict0:
-        print(a, dict0[a])
-    from time import sleep
-    sleep(20)
-    scanLaunch("G:\Cours ISEN", 1)
-    for a in dict1:
-        print(a, dict1[a])
-    checkMajScan(dict0,dict1)
+    while(True):
+        scanLaunch("C:\\Users\André\PycharmProjects\TP1", 2)
+        for a in dict0:
+            print(a, dict0[a])
+        from time import sleep
+        sleep(5)
+        scanLaunch("C:\\Users\André\PycharmProjects\TP1", 2)
+        for a in dict1:
+            print(a, dict1[a])
+        checkMajScan(dict0,dict1)
+        sleep(5)
 
 if __name__ == "__main__":
     mymain()
