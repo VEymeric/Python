@@ -1,5 +1,6 @@
 import begin
 import logging
+import random
 
 from logging.handlers import RotatingFileHandler
 
@@ -19,11 +20,23 @@ logger.addHandler(stream_handler)
 
 
 def init_deck_52():
-    deck = {}
+    """
+    :return: a list of 52 cards with deck[O]=[1,2] and deck[51]=[4,14]
+    """
+    deck = []
     for color in range(1, 5):
-        for value in range(1, 14):
-            deck[value + 13 * (color - 1)] = [color, value]
+        for value in range(2, 15):
+            deck.append([color, value])
     return deck
+
+
+def deck_shuffle(deck):
+    """
+    :param deck: a random deck
+    :return: another random deck with same cards
+    """
+    random.shuffle(deck)
+    return True
 
 
 def disp_card(card):
@@ -31,19 +44,18 @@ def disp_card(card):
     :param card: one card[color, value]
     :return: a string for real value of card like King♦
     """
-    print(card)
     txt = ""
-    value = ["Ace"] + [str(i) for i in range(2, 11)] + ["Jack", "Queen", "King"]
+    value = [str(i) for i in range(1, 11)] + ["Jack", "Queen", "King", "Ace"]
     color = ["♠", "♣", "♥", "♦"]
 
     if not len(value) > 0 < card[1]:
-        logger.warning("value=" + str(card[1]) + ' : Wrong value -> set to 1')
+        logger.warning("value=" + str(card[1]) + ' : Wrong value -> set to 2')
         card[1] = 1
     txt += value[card[1] - 1]
     if not card[0] > 0 < len(color):
-        logger.warning("color=" + str(card[0]) + ' : Wrong value -> set to 1')
+        logger.warning("color=" + str(card[0]) + ' : Wrong color -> set to 1')
         card[0] = 1
-    txt += color[card[0] - 1]
+    txt += color[card[0]-1]
 
     return txt
 
@@ -63,12 +75,28 @@ def disp_n_top_cards(cards, index=1, n=-1):
     return True
 
 
+def give_card_to_player(deck, player):
+    player += [deck[0]]
+    player += [deck[1]]
+    deck.pop(0)
+    deck.pop(0)
+    logger.info("one player get these cards : %s", player)
+    return deck, player
+
+
 @begin.start(auto_convert=True, lexical_order=True)
 def start(player: "How much players" = 2):
     if not 1 < int(player) < 11:
-        logger.warning("player=" + str(player) + ' : Wrong value -> set to 2')
+        logger.info("player=" + str(player) + ' : Wrong value -> set to 2')
         player = 2
-    logger.info("player=" + str(player))
+    logger.info("nb players = " + str(player))
+
+    players = []
     deck = init_deck_52()
-    print(deck[1])
-    print(disp_card(deck[52]))
+    deck_shuffle(deck)
+
+    for i in range(player):
+        players.append([])
+        deck, players[i] = give_card_to_player(deck, players[i])
+
+    #fonctions qui check la main ici
