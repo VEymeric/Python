@@ -1,16 +1,22 @@
-def VerifPartie2(jeu):
-    liste = MetTabloSuite(jeu)
-    essaiCouleur = identifierCouleur(jeu)
-    essaieSuite = identifieSuite(liste)
 
-    if essaiCouleur[0] != 5 and essaieSuite[0] == True :
+
+def VerifPartie2(jeu):
+    """
+    :param jeu: Carte
+    :return: liste classique en fonction de Suite Couleur Quint flush et quint flush royale
+    """
+    liste = MetTabloSuite(jeu)
+    essaiCouleur = identifierCouleur(jeu) #Verifie si on a une couleur
+    essaieSuite = identifieSuite(liste) #Verififie si on a une suite
+
+    if essaiCouleur[0] != 5 and essaieSuite[0] == True : #Si on a une Couleur ET une suite on verife QFR
         return identifieQuinteFlush(essaiCouleur[1])
 
-    if essaiCouleur[0] != 5 :
+    if essaiCouleur[0] != 5 : #On renvoie couleur
         carteForte = essaiCouleur[1]
-        return [5,carteForte[1]]
+        return [5,carteForte[0][1]]
 
-    if essaieSuite[0] == True:
+    if essaieSuite[0] == True: #On renovi suite
         return [4, essaieSuite[1]]
 
     return [0]
@@ -27,6 +33,10 @@ def identifieQuinteFlush(carteCouleur):
 
 
 def identifierCouleur(mainPoker):
+    """
+    :param mainPoker: les 7 Carte
+    :return: [num couleur, carte le plus forte
+    """
     pique =0 ; trefle = 0 ; coeur = 0 ; carreau = 0
     for c in mainPoker: #COmpte le nombre de carte dans chaque couleur
         if(c[0] == 1):
@@ -37,6 +47,7 @@ def identifierCouleur(mainPoker):
             coeur+=1
         elif(c[0] == 4):
             carreau+=1
+    #La "liste" est les carte de la couleur concerné et seulement celle la
     if(pique < 5 and trefle < 5 and coeur < 5 and carreau < 5): #Choisi si 5 carte dans une couleur, passez a la suite.
         return [5, mainPoker]
     elif(pique >= 5):
@@ -54,11 +65,12 @@ def identifierCouleur(mainPoker):
 
 
 def identifieSuite(liste):
-    """Dit si il y aune liste a partir d'un tablo avec nbr carte
+    """Dit si il y a une liste a partir d'un tablo avec nbr carte
     return : list avec [boolean,debutsuite,finsuite]
     """
     cpt = 0
-    for i in range(len(liste)-1,-1,-1):
+    for i in range(len(liste)-1,-1,-1):#On prend le InRange pour avoir pas de -1
+        #LA flemme de corriger le range(len(liste)) par un enumerate(liste[::-1]
         if liste[i] == 0: #On repars a 0 pour le compte d ecarte de la suite
             cpt =0
         if liste[i] >= 1:
@@ -69,46 +81,26 @@ def identifieSuite(liste):
     return [False,0,0]
 
 
-def MetTabloSuite(liste): #Transforme le jeu du joueur en valeur dans le tablo "grosseur"
-    tablo = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0]
+def MetTabloSuite(liste):
+    """
+    :param liste: les 7 cartes
+    :return: LE tablo adapté au fct suite
+    """
+    tablo = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for i in liste:
-        tablo = (TriValeur(tablo, i))
+        tablo[i[1]-2] += 1
+
+    valeurAs = tablo[12]
+    tablo.insert(0,valeurAs)
     return tablo
 
 
-def TriValeur(liste,carte): #place la valeur de la carte dans la liste]
-    if carte[1] == 14 :
-        liste[0]+=1
-    if carte[1] == 2 :
-        liste[1]+=1
-    if carte[1] == 3 :
-        liste[2]+=1
-    if carte[1] == 4 :
-        liste[3]+=1
-    if carte[1] == 5 :
-        liste[4]+=1
-    if carte[1] == 6 :
-        liste[5]+=1
-    if carte[1] == 7 :
-        liste[6]+=1
-    if carte[1] == 8 :
-        liste[7]+=1
-    if carte[1] == 9 :
-        liste[8]+=1
-    if carte[1] == 10 :
-        liste[9]+=1
-    if carte[1] == 11:
-        liste[10]+=1
-    if carte[1] == 12 :
-        liste[11]+=1
-    if carte[1] == 13 :
-        liste[12]+=1
-    if carte[1] == 14:
-        liste[13]+=1
-    return liste
-
-
 def TriCouleur(couleur, mainPoker):
+    """
+    :param couleur:
+    :param mainPoker:
+    :return: renvoi la liste des carte de la couleur trié
+    """
     liste = []
     for c in mainPoker:
         if(c[0] == couleur):
@@ -119,33 +111,65 @@ def TriCouleur(couleur, mainPoker):
 
 
 def DetermineMeilleur(jeu):
-    v1 = VerifPartie1(jeu)
-    v2 = VerifPartie2(jeu)
+    """
+    :param jeu: Les 2 carte du jOueur + les 5 carte public
+    :return: return une liste de plusieur element en fonction de ce que la main as
+    """
 
+    v1 = VerifPartie1(jeu) #2 verification car on as bossé a 2 dessus
+    v2 = VerifPartie2(jeu) #l'une Verifie les Suite/couleur l'autre les paire/brelan/carré ect ...
+    print(v1,v2)
     if v1[0] > v2[0] :
         return v1
-    elif v1[0] == v2[0]:#Egalité
-
-        tablo = MetTablo(jeu)
-        return [0,TrouveCarteHaute(tablo,0,0)]
-    else:
+    elif v1[0] < v2[0]:#Egalité ou il n'y a pas de figure.
         return v2
+    else:
+        return v1
 
 
 def VerifPartie1(jeu):
+    """
+    :param jeu: Carte
+    :return: Retrun la liste classique pour ce qui concerne Pair/Brelan/Carré/full/Rien
+    """
     tablo = MetTablo(jeu)
     resultat = Identifie(tablo)
+    #print("###############" , resultat)
+    TrouveCarteHaute(tablo,resultat)
+    #print("-----------------" , resultat)
     return resultat
 
 
-def TrouveCarteHaute(tablo,max1,max2):
-    #print("Trouver :",tablo , max1,max2)
-    for i in range(len(tablo) - 1, -1, -1): #Comment a len(tablo)-1, jusqu'a -1 par pas de -1
-        if tablo[i] != 0 and i != max1 and i != max2:
-            return i
+def TrouveCarteHaute(tablo,resultat):
+    x = resultat[0]
+    if x == 7 or x == 1 or x == 3:
+        for pos, i in enumerate(tablo[::-1]):  # Parcours tablo a l'envers
+            position = len(tablo) - pos + 1
+            if (i>0) and (position !=resultat[1]):
+                resultat.append(position)
+                return
+                #print("pos : " , position , "Valeur : ", i)
+        print(tablo)
+    if x == 2:
+        for pos, i in enumerate(tablo[::-1]):  # Parcours tablo a l'envers
+            position = len(tablo) - pos + 1
+            if (i>0) and (position !=resultat[1] and position !=resultat[2]):
+                resultat.append(position)
+                return
+    if x == 0:
+        for pos, i in enumerate(tablo[::-1]):  # Parcours tablo a l'envers
+            position = len(tablo) - pos + 1
+            if (i>0):
+                resultat.append(position)
+                return
 
 
 def Identifie(tablo):
+    """
+    PErme de definir ce qu'il y a dans le eju
+    :param tablo: tablo classique du prgm
+    :return: return la liste adapté en fonction des carte pour Brelan/paire/full/carre/rien
+    """
     #print(tablo)
     cpt = 0
     brelan = []
@@ -161,69 +185,39 @@ def Identifie(tablo):
             paire.append(cpt+1)
     ###################################### A partir de maintenant, determine les figures
     #print("Liste Paire :",paire,"taille",len(paire))
-    if len(brelan) > 0 and len(paire)>0:
+    if len(brelan) > 0 and len(paire)>0: #Est ce qu'on a Un breln ET une paire
         return [6,max(brelan)] # [valeur de la figure, valeur des carte du brelan ]
-    if len(brelan) > 0:
+    if len(brelan) > 0: #Est ce qu'on a un brelan ?
         return [3, max(brelan)] # [valeur de la figure, valeur des carte du brelan]
     if len(paire) > 1:
-        #print("Liste Paire :",paire)
         max1 = max(paire)
         paire.sort()
         paire.pop()
         max2 = max(paire)
-        ch = TrouveCarteHaute(tablo,max1,max2)
-        return [2,max1,max2,ch]
+        return [2,max1,max2]
     if len(paire)>0:
         max1 = max(paire)
-        ch = TrouveCarteHaute(tablo,max1,0)
-        return[1,max(paire),ch]
-
+        return [1,max(paire)]
     return[0]
 
 
-def MetTablo(liste): #Transforme le jeu du joueur en valeur dans le tablo "grosseur"
+def MetTablo(liste):
+    """
+    :param liste: LEs 7 cartes
+    :return: tablo classique pour les fonction
+    """
     tablo = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for i in liste:
-        tablo = (TriCarte(tablo, i))
+        tablo[i[1]-2] += 1
     return tablo
-
-
-def TriCarte(liste,carte): #place la valeur de la carte dans la liste]
-    if carte[1] == 2 :
-        liste[0]+=1
-    if carte[1] == 3 :
-        liste[1]+=1
-    if carte[1] == 4 :
-        liste[2]+=1
-    if carte[1] == 5 :
-        liste[3]+=1
-    if carte[1] == 6 :
-        liste[4]+=1
-    if carte[1] == 7 :
-        liste[5]+=1
-    if carte[1] == 8 :
-        liste[6]+=1
-    if carte[1] == 9 :
-        liste[7]+=1
-    if carte[1] == 10 :
-        liste[8]+=1
-    if carte[1] == 11:
-        liste[9]+=1
-    if carte[1] == 12 :
-        liste[10]+=1
-    if carte[1] == 13 :
-        liste[11]+=1
-    if carte[1] == 14:
-        liste[12]+=1
-    return liste
-
 
 
 def mymain():
 
-    jeu = [[2,8], [1,3], [2,4], [2,5], [2,6], [1,7], [1,8]]
-    jeu1 = [[2, 2], [3, 10], [4, 12], [4, 11], [3, 12], [1, 13], [1, 14]]
-    print(DetermineMeilleur(jeu1))
+    jeu = [[2,2], [1,3], [2,4], [2,8], [2,6], [1,7], [1,14]]
+    jeu1 = [[2, 10], [2, 14], [4, 12], [1, 11], [1, 3], [1, 13], [1, 4]]
+    jeu2 = [[2, 14], [1, 14], [4, 14], [1, 11], [1, 3], [1, 13], [1, 4]]
+    print(DetermineMeilleur(jeu2))
 
 
 
