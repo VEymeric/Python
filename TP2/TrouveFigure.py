@@ -124,7 +124,8 @@ def DetermineMeilleur(jeu):
 
     if v1[0] > v2[0] :
         return v1
-    elif v1[0] == v2[0]:
+    elif v1[0] == v2[0]:#Egalité
+
         tablo = MetTablo(jeu)
         return [0,TrouveCarteHaute(tablo,0,0)]
     else:
@@ -222,7 +223,7 @@ def mymain():
 
     jeu = [[2,8], [1,3], [2,4], [2,5], [2,6], [1,7], [1,8]]
     jeu1 = [[2, 2], [3, 10], [4, 12], [4, 11], [3, 12], [1, 13], [1, 14]]
-    print(DetermineMeilleur(jeu))
+    print(DetermineMeilleur(jeu1))
 
 
 
