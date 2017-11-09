@@ -1,8 +1,27 @@
 import begin
 import logging
 import random
-
+import numpy
+import TrouveFigure
 from logging.handlers import RotatingFileHandler
+
+COLORS = [i for i in range(1, 5)]
+VALUES = [i for i in range(2, 15)]
+DEFAULT_MIN_PLAYER = 2
+DEFAULT_MAX_PLAYER = 8
+DEFAULT_NB_PLAYER = 2
+DEFAULT_NB_BURN = 1
+DEFAULT_CARD_FLOP = 3
+DEFAULT_CARD_THE_TURN = 1
+DEFAULT_CARD_RIVER = 1
+VALUE_STRAIGHT_FLUSH = 8
+VALUE_FOUR = 7
+VALUE_FULL = 6
+VALUE_FLUSH = 5
+VALUE_STRAIGHT = 4
+VALUE_THREE = 3
+VALUE_TWO_PAIR = 2
+VALUE_PAIR = 1
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -24,8 +43,8 @@ def init_deck_52():
     :return: a list of 52 cards with deck[O]=[1,2] and deck[51]=[4,14]
     """
     deck = []
-    for color in range(1, 5):
-        for value in range(2, 15):
+    for color in COLORS:
+        for value in VALUES:
             deck.append([color, value])
     return deck
 
@@ -45,8 +64,8 @@ def disp_card(card):
     :return: a string for real value of card like King♦
     """
     txt = ""
-    value = [str(i) for i in range(1, 11)] + ["Jack", "Queen", "King", "Ace"]
-    color = ["♠", "♣", "♥", "♦"]
+    value = [str(i) for i in range(2, 11)] + ["Jack", "Queen", "King", "Ace"]
+    color = ["C", "D", "H", "S"]
 
     if not len(value) > 0 < card[1]:
         logger.warning("value=" + str(card[1]) + ' : Wrong value -> set to 2')
@@ -84,14 +103,55 @@ def give_card_to_player(deck, player):
     return deck, player
 
 
+def set_table(deck, table, nb_cards):
+    if nb_cards < 1:
+        return
+
+    burn = deck[0]
+    logger.info("This card have been burn : %s", burn)
+    deck.pop(0)
+
+    for i in range(nb_cards):
+        table += [deck[0]]
+        deck.pop(0)
+    logger.info("Table changed : %s", table)
+    return deck, table
+
+
+def check_winner(players_hand, board):
+    leader_board = []
+    for index, player in enumerate(players_hand):
+        player_board = board+player
+        leader_board.append(TrouveFigure.DetermineMeilleur(player_board))
+        print(max(leader_board[0]))
+    # We try to find best hand
+    best_id_hand = 0
+    for index, test in enumerate(leader_board[1:]):
+        index += 1  # As we didn't took first card
+        check_best_hand = True
+        test = 0
+        while check_best_hand and leader_board[best_id_hand]:
+            if leader_board[best_id_hand][test] < leader_board[index][test]:
+                best_index_hand = index
+                check_best_hand = False
+            elif leader_board[best_id_hand][test] > leader_board[index][test]:
+                check_best_hand = False
+            elif leader_board[best_id_hand][test] == leader_board[index][test]:
+                test += 1
+    best_hand = leader_board[best_id_hand]
+    logger.info("Best hand is : " + str(best_hand) + " from player " + str(best_id_hand + 1))
+
+
 @begin.start(auto_convert=True, lexical_order=True)
 def start(player: "How much players" = 2):
-    if not 1 < int(player) < 11:
-        logger.info("player=" + str(player) + ' : Wrong value -> set to 2')
-        player = 2
+    if not DEFAULT_MIN_PLAYER <= int(player) <= DEFAULT_MAX_PLAYER:
+        logger.info("player=" + str(player) + ' : Wrong value -> set to ' + str(DEFAULT_NB_PLAYER))
+        player = DEFAULT_NB_PLAYER
     logger.info("nb players = " + str(player))
 
     players = []
+    table = []
+
     deck = init_deck_52()
     deck_shuffle(deck)
 
@@ -99,4 +159,9 @@ def start(player: "How much players" = 2):
         players.append([])
         deck, players[i] = give_card_to_player(deck, players[i])
 
-    #fonctions qui check la main ici
+    deck, table = set_table(deck, table, DEFAULT_CARD_FLOP)
+    deck, table = set_table(deck, table, DEFAULT_CARD_THE_TURN)
+    deck, table = set_table(deck, table, DEFAULT_CARD_RIVER)
+
+    check_winner(players, table)
+    # functions qui check la main ici
