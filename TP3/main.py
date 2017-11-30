@@ -75,7 +75,11 @@ def upload_this(ftp_server, path,tailleMax):
 
 
 @begin.start(auto_convert=True)
-def start(local, ftp_server=connexion_ftp("localhost", "user", "1234"), frequence=15, sub_dir=6, debug_mode=False, size_max=10, debug=False):
+def start(local: 'Dossier à synchroniser',
+          host: 'Nom d\'hôte',
+          user: 'Nom d\'utilisateur',
+          password: 'Mot de passe',
+          frequence=15, sub_dir=6, debug=False, size_max=10):
     #debug = True
     if (debug==True):
         file_handler.setLevel(logging.DEBUG)
