@@ -1,0 +1,77 @@
+2017-11-23 16:32:41,180 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:33:10,162 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:36:24,509 :: ERROR :: Error when send folder : [Errno 2] No such file or directory: 'test/caca.txt'
+2017-11-23 16:37:08,888 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:37:56,315 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:38:32,081 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:38:50,759 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:42:57,091 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:46:36,233 :: ERROR :: Error when send folder : 450 Internal error creating the directory.
+2017-11-23 16:54:43,093 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:55:28,365 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 16:59:14,443 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:05:48,838 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:05:48,839 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:07:03,604 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:07:03,605 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:09:18,604 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:09:18,605 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:10:13,501 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:10:13,501 :: INFO :: server_local\test\caca.txt
+2017-11-23 17:10:13,502 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:10:47,304 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:10:47,304 :: INFO :: caca.txt
+2017-11-23 17:10:47,304 :: ERROR :: Error when send files : [Errno 2] No such file or directory: 'caca.txt'
+2017-11-23 17:11:10,074 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:11:10,074 :: INFO :: server_local/test/caca.txt
+2017-11-23 17:11:10,075 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:11:27,189 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:11:27,189 :: INFO :: server_local\test\caca.txt
+2017-11-23 17:11:27,190 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:12:11,224 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:12:11,224 :: INFO :: server_local\test\caca.txt
+2017-11-23 17:12:11,226 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:12:32,609 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:12:32,610 :: INFO :: caca.txt
+2017-11-23 17:13:31,660 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:13:31,661 :: INFO :: test/caca.txt
+2017-11-23 17:13:31,661 :: ERROR :: Error when send files : [Errno 2] No such file or directory: 'test/caca.txt'
+2017-11-23 17:14:59,187 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:14:59,187 :: INFO :: test/caca.txt
+2017-11-23 17:14:59,187 :: ERROR :: Error when send files : [Errno 2] No such file or directory: 'test/caca.txt'
+2017-11-23 17:15:34,870 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:15:34,870 :: INFO :: caca.txt
+2017-11-23 17:22:09,287 :: ERROR :: Error when send folder : 550 Directory already exists
+2017-11-23 17:22:09,288 :: INFO :: ['server_local/test/caca.txt', 'server_local/test/test2.txt']
+2017-11-23 17:22:09,288 :: ERROR :: Error when send files : expected str, bytes or os.PathLike object, not list
+2017-11-23 17:30:23,320 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:30:23,320 :: ERROR :: Error when send files : expected str, bytes or os.PathLike object, not list
+2017-11-23 17:30:57,596 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:30:57,596 :: ERROR :: Error when send files : expected str, bytes or os.PathLike object, not list
+2017-11-23 17:31:47,976 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:31:47,977 :: ERROR :: Error when send files : expected str, bytes or os.PathLike object, not list
+2017-11-23 17:32:08,330 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:32:08,332 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:33:22,130 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:33:22,133 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:33:43,946 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:33:43,949 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:34:04,295 :: ERROR :: Error when create folder : 550 Directory already exists
+2017-11-23 17:34:04,298 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:34:41,804 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:34:41,805 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:35:26,872 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:35:26,874 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:38:22,725 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:38:22,727 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:38:41,165 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:38:41,167 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:39:24,975 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:39:24,978 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:39:54,398 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:39:54,400 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:40:45,326 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:40:45,328 :: ERROR :: Error when send files : 550 Filename invalid
+2017-11-23 17:42:03,756 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-23 17:42:19,390 :: ERROR :: Error when create folder : 550 File with same name already exists
+2017-11-27 23:22:16,329 :: ERROR :: Error when create folder : 550 Directory already exists
