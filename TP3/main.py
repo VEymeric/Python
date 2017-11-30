@@ -74,7 +74,7 @@ def upload_this_recurrence(ftp_server, path, sub_folder, sub_folder_max, size_ma
             except Exception as e:
                 pass
             ftp_server.cwd(f)
-            upload_this_recurrence(ftp_server, path + r'/{}'.format(f), sub_folder+1, sub_folder_max)
+            upload_this_recurrence(ftp_server, path + r'/{}'.format(f), sub_folder+1, sub_folder_max, size_max)
     ftp_server.cwd('..')
     os.chdir('..')
 
@@ -131,7 +131,7 @@ def start(local: 'Dossier à synchroniser',
           user: 'Nom d\'utilisateur',
           password: 'Mot de passe',
           frequence=15, sub_dir=6, debug=False, size_max=10):
-    #debug = True
+    debug = True
     if (debug==True):
         file_handler.setLevel(logging.DEBUG)
     else:
@@ -151,7 +151,8 @@ def start(local: 'Dossier à synchroniser',
     #ftp_server.retrlines('LIST')
     #ftp_server.mkd("BITE")
     listOfFiles = ["server_local/test/caca.txt"]
-    upload_this(local, local,tailleMax)
+    server = connexion_ftp(host, user, password)
+    upload_this(server, local, sub_dir, tailleMax)
     logger.debug("Fin de l'envoi")
     #send_folder_to_ftp(ftp_server, "server_local", "server_ftp/alo")
 
