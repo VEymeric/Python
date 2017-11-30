@@ -42,7 +42,13 @@ def connexion_ftp(host, user, password):
     return connect
 
 
-def upload_this(ftp_server, path):
+def upload_this(ftp_server, path, sub_folder_max):
+    upload_this_recurrence(ftp_server, path, 1, sub_folder_max)
+
+
+def upload_this_recurrence(ftp_server, path, sub_folder, sub_folder_max):
+    if sub_folder > sub_folder_max:
+        return
     files = os.listdir(path)
     os.chdir(path)
     for f in files:
@@ -54,27 +60,65 @@ def upload_this(ftp_server, path):
             try:  # just try to create a folder if didn't exist
                 ftp_server.mkd(f)
             except Exception as e:
-                donothing = True
+                pass
             ftp_server.cwd(f)
-            upload_this(ftp_server, path + r'/{}'.format(f))
+            upload_this_recurrence(ftp_server, path + r'/{}'.format(f), sub_folder+1, sub_folder_max)
     ftp_server.cwd('..')
     os.chdir('..')
 
+"""
+if(i[0] == 'd'): #it's a folder !
+            print(str(names_ftp.__len__()) + str(names_ftp[names_ftp.__len__()-1]))
+            test = names_ftp[names_ftp.__len__()-1]
+            ftp_server.cwd(test)
+            destroy_unused_files(ftp_server, ftp_folder+"\\"+test, sub_dir+1, sub_dir_max)
+            ftp_server.cwd('..')
+            
+            
+    try:
+        names_local = os.listdir(ftp_folder)
+    except Exception as e:
+        print("WWWWWWWO" +str(names_ftp))
+        truc = ftp_folder.split("\\")
+        print(truc[len(truc)-1])
+        ftp_server.cwd('..')
+        print("no error here")
+        ftp_server.delete(truc[len(truc)-1])
+        return
+"""
+def destroy_unused_files(ftp_server, ftp_folder, sub_dir, sub_dir_max):
+    if sub_dir > sub_dir_max:
+        return
+    l = []
+    names_local = []
+    ftp_server.retrlines('LIST ', l.append) ## Listage du repertoire a telecharger
+    print(l)
+    names_ftp = []
+    for i in l:
+        names_ftp.append(i.split()[8]) # names now contain all names of files in ftp
 
-@begin.start(auto_convert=True)
-def start(local, ftp_server=connexion_ftp("localhost", "chao", "1234"), frequence=15, sub_dir=6, debug_mode=False, size_max=10):
+    print("names_ftp" + str(names_ftp))
+    print("local : " + str(ftp_folder))
+    print("names_local" + str(names_local))
+    try:
+        names_local = os.listdir(ftp_folder)
+    except Exception as e:
+        pass
+    if names_ftp != names_local:
+        dif = set(names_ftp) - set(names_local)
+        for f in dif:
+            print("pls delete :" + f)
+            print(ftp_server.pwd())
+            ftp_server.delete(f)
+
+    # on a supprimé les fichiers, on passe maintenant dans les dossiers !
+
+
+@ begin.start(auto_convert=True)
+def start(local, ftp_server=connexion_ftp("localhost", "chao", "1234"), frequence=15, sub_dir=3, debug_mode=False, size_max=10):
     print("mdr")
-    #fichier = "test.txt"
-    #fichier2 = "test2.txt"
-    #file = open(fichier, 'rb')  # ici, j'ouvre le fichier ftp.py
-    #file2 = open(fichier2, 'wb')  # ici, j'ouvre le fichier ftp.py
-
-    #ftp_server.storbinary('STOR ' + fichier,file)  # ici (où connect est encore la variable de la connexion), j'indique le fichier à envoyer
-    #ftp_server.retrbinary('RETR ' + fichier2, file2.write)
-    #ftp_server.retrlines('LIST')
-    #ftp_server.mkd("BITE")
     listOfFiles = ["server_local/test/caca.txt"]
-    upload_this(ftp_server, local)
+    destroy_unused_files(ftp_server, local, 1, sub_dir)
     #send_folder_to_ftp(ftp_server, "server_local", "server_ftp/alo")
 
 
