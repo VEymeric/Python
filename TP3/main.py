@@ -16,11 +16,12 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.DEBUG)
+stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
 
 def listdirectory(path, maximum, valeur_actuelle):
+    logger.debug("fdsfs")
     mylist = []
     fichier = []
     temp = os.listdir(path)
@@ -38,25 +39,36 @@ def listdirectory(path, maximum, valeur_actuelle):
 
 def connexion_ftp(host, user, password):
     connect = FTP(host, user, password)  # on se connecte
-    print(connect.getwelcome())
+    logger.info("Connexion :" + connect.getwelcome())
     return connect
 
 
-def upload_this(ftp_server, path, sub_folder_max):
-    upload_this_recurrence(ftp_server, path, 1, sub_folder_max)
+def upload_this(ftp_server, path, sub_folder_max, size_max):
+    upload_this_recurrence(ftp_server, path, 1, sub_folder_max, size_max)
 
 
-def upload_this_recurrence(ftp_server, path, sub_folder, sub_folder_max):
+def upload_this_recurrence(ftp_server, path, sub_folder, sub_folder_max, size_max):
     if sub_folder > sub_folder_max:
         return
     files = os.listdir(path)
     os.chdir(path)
+    logger.debug("Debut Traitement de : ["+path+"]")
     for f in files:
+
         if os.path.isfile(path + r'\{}'.format(f)):
-            fh = open(f, 'rb')
-            ftp_server.storbinary('STOR %s' % f, fh)
-            fh.close()
+            logger.debug("Traitement [" + f + "]")
+            if (os.path.getsize(path + r'\{}'.format(f)) > size_max):
+                logger.error("Le fichier " + path + r'\{}'.format(f) + " depasse la limite autorisée et n'a pas été transféré")
+                #print(path + r'\{}'.format(f), os.path.getsize(path + r'\{}'.format(f)))
+            else :
+                #print(os.path.getsize(path))
+                #print(path + r'\{}'.format(f))
+                logger.debug("Envoi du fichier : ["+path + r'\{}'.format(f)+"]")
+                fh = open(f, 'rb')
+                ftp_server.storbinary('STOR %s' % f, fh)
+                fh.close()
         elif os.path.isdir(path + r'/{}'.format(f)):
+            logger.debug("Traitement sous dossier [" + f + "]")
             try:  # just try to create a folder if didn't exist
                 ftp_server.mkd(f)
             except Exception as e:
@@ -113,12 +125,34 @@ def destroy_unused_files(ftp_server, ftp_folder, sub_dir, sub_dir_max):
 
     # on a supprimé les fichiers, on passe maintenant dans les dossiers !
 
+@begin.start(auto_convert=True)
+def start(local: 'Dossier à synchroniser',
+          host: 'Nom d\'hôte',
+          user: 'Nom d\'utilisateur',
+          password: 'Mot de passe',
+          frequence=15, sub_dir=6, debug=False, size_max=10):
+    #debug = True
+    if (debug==True):
+        file_handler.setLevel(logging.DEBUG)
+    else:
+        file_handler.setLevel(logging.INFO)
+    tailleMax = size_max * 1000000
+    logger.debug("###########################################################")
 
-@ begin.start(auto_convert=True)
-def start(local, ftp_server=connexion_ftp("localhost", "chao", "1234"), frequence=15, sub_dir=3, debug_mode=False, size_max=10):
-    print("mdr")
+
+
+    #fichier = "test.txt"
+    #fichier2 = "test2.txt"
+    #file = open(fichier, 'rb')  # ici, j'ouvre le fichier ftp.py
+    #file2 = open(fichier2, 'wb')  # ici, j'ouvre le fichier ftp.py
+
+    #ftp_server.storbinary('STOR ' + fichier,file)  # ici (où connect est encore la variable de la connexion), j'indique le fichier à envoyer
+    #ftp_server.retrbinary('RETR ' + fichier2, file2.write)
+    #ftp_server.retrlines('LIST')
+    #ftp_server.mkd("BITE")
     listOfFiles = ["server_local/test/caca.txt"]
-    destroy_unused_files(ftp_server, local, 1, sub_dir)
+    upload_this(local, local,tailleMax)
+    logger.debug("Fin de l'envoi")
     #send_folder_to_ftp(ftp_server, "server_local", "server_ftp/alo")
 
 
