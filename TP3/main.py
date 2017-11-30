@@ -1,6 +1,7 @@
 import begin
 import logging
 import os
+import time
 
 from ftplib import FTP
 from logging.handlers import RotatingFileHandler
@@ -152,8 +153,10 @@ def start(local: 'Dossier à synchroniser',
     #ftp_server.mkd("BITE")
     listOfFiles = ["server_local/test/caca.txt"]
     server = connexion_ftp(host, user, password)
-    upload_this(server, local, sub_dir, tailleMax)
-    logger.debug("Fin de l'envoi")
+    while(True):
+        upload_this(server, local, sub_dir, tailleMax)
+        logger.debug("Fin de l'envoi")
+        time.sleep(frequence)
     #send_folder_to_ftp(ftp_server, "server_local", "server_ftp/alo")
 
 
