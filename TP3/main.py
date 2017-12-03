@@ -57,12 +57,10 @@ def upload_this_recurrence(ftp_server, path, sub_folder, sub_folder_max, size_ma
 
         if os.path.isfile(path + r'\{}'.format(f)):
             logger.debug("Traitement [" + f + "]")
-            if (os.path.getsize(path + r'\{}'.format(f)) > size_max):
-                logger.error("Le fichier " + path + r'\{}'.format(f) + " depasse la limite autorisée et n'a pas été transféré")
-                #print(path + r'\{}'.format(f), os.path.getsize(path + r'\{}'.format(f)))
-            else :
-                #print(os.path.getsize(path))
-                #print(path + r'\{}'.format(f))
+            if os.path.getsize(path + r'\{}'.format(f)) > size_max:
+                logger.error("Le fichier " + path + r'/{}'.format(f) + " depasse la limite autorisée "
+                                                                       "et n'a pas été transféré")
+            else:
                 logger.debug("Envoi du fichier : ["+path + r'\{}'.format(f)+"]")
                 fh = open(f, 'rb')
                 ftp_server.storbinary('STOR %s' % f, fh)
@@ -132,28 +130,14 @@ def start(local: 'Dossier à synchroniser',
           password: 'Mot de passe',
           frequence=15, sub_dir=6, debug=False, size_max=10):
     debug = True
-    if (debug==True):
+    if debug:
         file_handler.setLevel(logging.DEBUG)
     else:
         file_handler.setLevel(logging.INFO)
-    tailleMax = size_max * 1000000
+        size_max = size_max * 1000000
     logger.debug("###########################################################")
-
-
-
-    #fichier = "test.txt"
-    #fichier2 = "test2.txt"
-    #file = open(fichier, 'rb')  # ici, j'ouvre le fichier ftp.py
-    #file2 = open(fichier2, 'wb')  # ici, j'ouvre le fichier ftp.py
-
-    #ftp_server.storbinary('STOR ' + fichier,file)  # ici (où connect est encore la variable de la connexion), j'indique le fichier à envoyer
-    #ftp_server.retrbinary('RETR ' + fichier2, file2.write)
-    #ftp_server.retrlines('LIST')
-    #ftp_server.mkd("BITE")
-    listOfFiles = ["server_local/test/caca.txt"]
     server = connexion_ftp(host, user, password)
-    upload_this(server, local, sub_dir, tailleMax)
+    upload_this(server, local, sub_dir, size_max)
     logger.debug("Fin de l'envoi")
-    #send_folder_to_ftp(ftp_server, "server_local", "server_ftp/alo")
 
 
