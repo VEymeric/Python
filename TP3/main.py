@@ -179,7 +179,10 @@ def start(local: 'Dossier à synchroniser',
           host: 'Nom d\'hôte',
           user: 'Nom d\'utilisateur',
           password: 'Mot de passe',
-          frequency=15, sub_dir=6, debug=False, size_max=10):
+          frequency: 'Frequence de raffraichissement'=15,
+          sub_dir: 'Nombre de sous-dossier max'=6,
+          debug: 'Affiche le debug dans les logs'=False,
+          max_size: 'Taille maximale d\'un fichier à envoyer'=10):
 
     file_handler = RotatingFileHandler(logs, 'a', 1000000, 1)
     file_handler.setLevel(logging.DEBUG)
@@ -190,7 +193,7 @@ def start(local: 'Dossier à synchroniser',
         file_handler.setLevel(logging.DEBUG)
     else:
         file_handler.setLevel(logging.INFO)
-    size_max = size_max * 1000000
+    size_max = max_size * 1000000
     logger.debug("################RESTART####################################")
     global is_connected
     cycle = 1
